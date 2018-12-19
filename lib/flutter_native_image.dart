@@ -9,7 +9,7 @@ class FlutterNativeImage {
   static Future<String> get platformVersion => _channel.invokeMethod('getPlatformVersion');
 
   static Future<File> compressImage(String fileName,
-      {int percentage = 70,
+      {int percentage = 0,
       int quality = 70,
       int targetWidth = 0,
       int targetHeight = 0}) async {

@@ -48,14 +48,16 @@
         
         UIImage *img = [[UIImage alloc] initWithData:data];
 
-        CGFloat newWidth = (widthArgument == 0 ? (img.size.width / 100 * percentageArgument) : widthArgument);
-        CGFloat newHeight = (heightArgument == 0 ? (img.size.height / 100 * percentageArgument) : heightArgument);
-        
-        CGSize newSize = CGSizeMake(newWidth, newHeight);
-        
-        UIImage *resizedImage = [img resizedImage:newSize interpolationQuality:kCGInterpolationHigh];
-        resizedImage = [self normalizedImage:resizedImage];
-        NSData *imageData = UIImageJPEGRepresentation(resizedImage, qualityArgument / 100);
+        if (widthArgument != 0 && heightArgument != 0 || percentageArgument != 0) {
+            CGFloat newWidth = (widthArgument == 0 ? (img.size.width / 100 * percentageArgument) : widthArgument);
+            CGFloat newHeight = (heightArgument == 0 ? (img.size.height / 100 * percentageArgument) : heightArgument);
+
+            CGSize newSize = CGSizeMake(newWidth, newHeight);
+
+            img = [img img:newSize interpolationQuality:kCGInterpolationHigh];
+            img = [self normalizedImage:img];
+        }
+        NSData *imageData = UIImageJPEGRepresentation(img, qualityArgument / 100);
 
         if ([[NSFileManager defaultManager] createFileAtPath:finalFileName contents:imageData attributes:nil]) {
             result(finalFileName);
