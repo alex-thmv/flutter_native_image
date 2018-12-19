@@ -33,9 +33,6 @@
         NSString *fileExtension = @"_compressed.jpg";
         
         int qualityArgument = [[_arguments objectForKey:@"quality"] intValue];
-        int percentageArgument = [[_arguments objectForKey:@"percentage"] intValue];
-        int widthArgument = [[_arguments objectForKey:@"targetWidth"] intValue];
-        int heightArgument = [[_arguments objectForKey:@"targetHeight"] intValue];
         NSString *fileArgument = [_arguments objectForKey:@"file"];
         NSURL *uncompressedFileUrl = [NSURL URLWithString:fileArgument];
         
@@ -47,16 +44,6 @@
         NSData *data = [[NSFileManager defaultManager] contentsAtPath:path];
         
         UIImage *img = [[UIImage alloc] initWithData:data];
-
-        if (widthArgument != 0 && heightArgument != 0 || percentageArgument != 0) {
-            CGFloat newWidth = (widthArgument == 0 ? (img.size.width / 100 * percentageArgument) : widthArgument);
-            CGFloat newHeight = (heightArgument == 0 ? (img.size.height / 100 * percentageArgument) : heightArgument);
-
-            CGSize newSize = CGSizeMake(newWidth, newHeight);
-
-            img = [img img:newSize interpolationQuality:kCGInterpolationHigh];
-            img = [self normalizedImage:img];
-        }
         NSData *imageData = UIImageJPEGRepresentation(img, qualityArgument / 100);
 
         if ([[NSFileManager defaultManager] createFileAtPath:finalFileName contents:imageData attributes:nil]) {
